@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Example application</title>
+  </head>
+  <body>
+    <!-- BEGIN (write your solution here) -->
+    <div>
+        <a href="/users/new">Create new user</a>
+    </div>
+
+    <table>
+        {% for user in users %}
+            <ul>
+                {{ user.nickname }} : {{ user.nickname }}
+            </ul>
+        {% endfor %}
+    </table>
+    
+    {% if messages %}
+        <ul class=flashes>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <!-- END -->
+  </body>
+</html>
