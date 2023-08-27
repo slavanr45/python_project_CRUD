@@ -1,25 +1,25 @@
 <!doctype html>
 <html>
   <head>
-    <title>Example application</title>
+    <title>Project CRUD</title>
   </head>
   <body>
-    <a href="/users">Пользователи</a>
-    <!-- BEGIN (write your solution here) -->
+    <h1>
+        <a href="{{ url_for('users_get') }}">Просмотр пользователей</a>
+    </h1>
+
+    <hr>
+
     <table>
         <tr>
-          <td>id: {{ user.id }}</td>
+            <td>ID пользователя: {{ user.id }}</td>
+          </tr>
+        <tr>
+          <td>Имя пользователя: {{ user.name }}</td>
         </tr>
         <tr>
-            <td>first_name: {{ user.first_name }}</td>
+          <td>Почтовый адрес : {{ user.email }}</td>
         </tr>
-        <tr>
-            <td>last_name: {{ user.last_name }}</td>
-        </tr>
-        <tr>
-            <td>email: {{ user.email }}</td>
-        </tr>
-      </table>
-    <!-- END -->
+    </table>
   </body>
 </html>

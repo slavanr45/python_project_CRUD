@@ -1,20 +1,27 @@
 <!doctype html>
 <html>
   <head>
-    <title>Example application</title>
+    <title>Project CRUD</title>
   </head>
   <body>
-    <!-- BEGIN (write your solution here) -->
     <div>
-        <a href="/users/new">Create new user</a>
+        <h1>
+            <a href="{{ url_for('user_new') }}">Добавить нового пользователя</a>
+        </h1>
+        <hr>
     </div>
 
+
     <table>
+        <ol>
         {% for user in users %}
-            <ul>
-                {{ user.nickname }} : {{ user.nickname }}
-            </ul>
-        {% endfor %}
+            <li>
+                Пользователь: {{ user.name }}
+                <a href="{{ url_for('user_get', id=user.id) }}">Просмотр</a> 
+                <a href="{{ url_for('user_edit', id=user.id) }}">Редактировать</a> 
+            </li>
+        {% endfor %}  
+        </ol>
     </table>
     
     {% if messages %}
@@ -24,6 +31,5 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <!-- END -->
   </body>
 </html>
