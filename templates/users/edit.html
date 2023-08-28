@@ -2,27 +2,8 @@
     <h1>Редактирование пользователя</h1>
     <hr>
 
-    <div style="padding: 10px 0 0 0;">
-        <label> Имя пользователя:
-            <input type="text" required name="name" value="{{ user.name|default('') }}">
-        </label>
-        {% if err['name'] %}
-            <div>
-                {{ err['name'] }}
-            </div>
-        {% endif %}
-    </div>
+    {% include "users/form.html" %}
 
-    <div style="padding: 10px 0 0 0;">
-        <label> Почтовый адрес:
-            <input type="email" required name="email" value="{{ user.email|default('') }}">
-        </label>
-        {% if err['email'] %}
-            <div>
-                {{ err['email'] }}
-            </div>
-        {% endif %}
-    </div>
     <div style="padding: 10px 0 0 0;">
         <input type="submit" value="Принять изменения">
     </div>
