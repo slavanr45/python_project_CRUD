@@ -13,7 +13,7 @@
     <table>
         <tr>
             <td>ID пользователя: {{ user.id }}</td>
-          </tr>
+        </tr>
         <tr>
           <td>Имя пользователя: {{ user.name }}</td>
         </tr>
@@ -21,5 +21,9 @@
           <td>Почтовый адрес : {{ user.email }}</td>
         </tr>
     </table>
+    <form action="{{ url_for('user_delete', id=user.id) }}" method="post" 
+        onsubmit="return confirm('Are you sure you want to delete user?');">
+        <input type="submit" value="Удалить">
+    </form>
   </body>
 </html>

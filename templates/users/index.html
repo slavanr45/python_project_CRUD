@@ -18,7 +18,7 @@
             <li>
                 Пользователь: {{ user.name }}
                 <a href="{{ url_for('user_get', id=user.id) }}">Просмотр</a> 
-                <a href="{{ url_for('user_edit', id=user.id) }}">Редактировать</a> 
+                <a href="{{ url_for('user_edit', id=user.id) }}">Редактировать</a>
             </li>
         {% endfor %}  
         </ol>

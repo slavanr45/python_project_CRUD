@@ -59,7 +59,7 @@ def user_post():
             'users/new.html',
             user=data,
             err=err), 422
-    data['id'] = users_db[-1].get('id', 0) + 1
+    data['id'] = sorted(users_db, key=lambda x: x['id'])[-1].get('id', 0) + 1
     users_db.append(data)
     with open('users_db.json', 'w', encoding='utf8') as file:
         json.dump(users_db, file)
@@ -76,6 +76,41 @@ def validate(data):
     return err
 
 
-@app.route('/users/<id>')
+@app.route('/users/<int:id>/edit')
 def user_edit(id):
-    pass
+    user = next(filter(lambda x: x['id'] == id, users_db), None)
+    err = {}
+    return render_template(
+        'users/edit.html',
+        user=user,
+        err=err)
+
+
+@app.route('/users/<int:id>/edit', methods=['POST'])
+def user_update(id):
+    user = next(filter(lambda x: x['id'] == id, users_db), None)
+    data = request.form.to_dict()
+    err = validate(data)
+    if err:
+        return render_template(
+            'users/edit.html',
+            user=user,
+            err=err), 422
+    users_db.remove(user)
+    user['name'] = data['name']
+    user['email'] = data['email']
+    users_db.append(user)
+    with open('users_db.json', 'w', encoding='utf8') as file:
+        json.dump(users_db, file)
+    flash('User has been updated', 'success')
+    return redirect(url_for('users_get'))
+
+
+@app.route('/users/<int:id>/delete', methods=['POST'])
+def user_delete(id):
+    user = next(filter(lambda x: x['id'] == id, users_db), None)
+    users_db.remove(user)
+    with open('users_db.json', 'w', encoding='utf8') as file:
+        json.dump(users_db, file)
+    flash('User has been deleted', 'success')
+    return redirect(url_for('users_get'))
