@@ -1,9 +1,15 @@
 
-start:
-	poetry run flask --app example run --port 8000
+start_json:
+	poetry run flask --app webserver_json_file run --port 8000
 
-startdb:
-	poetry run flask --app example --debug run --port 8000
+start_debug_json:
+	poetry run flask --app webserver_json_file --debug run --port 8000
+
+start:
+	poetry run flask --app webserver_session run --port 8000
+
+start_debug:
+	poetry run flask --app webserver_session --debug run --port 8000
 
 install:
 	poetry install
