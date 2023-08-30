@@ -9,6 +9,21 @@
             <a href="{{ url_for('users_get') }}">Просмотр пользователей</a>
         </h1>
         <hr>
+        <form action="/login" method="post">
+            <div style="padding: 10px 0 0 0;">
+                <label> Имя пользователя:
+                    <input type="password" required name="password" value="123">
+                </label>
+            </div>
+        <input type="submit" value="Login"> </form>
     </div>
+
+    {% if messages %}
+        <ul class=flashes>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
   </body>
 </html>

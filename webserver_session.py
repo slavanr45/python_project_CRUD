@@ -20,11 +20,16 @@ def index():
     if not session.modified:
         session.modified = True
     print(session)
-    return render_template('index.html')
+    mes = get_flashed_messages(with_categories=True)
+    return render_template(
+        'index.html',   messages=mes)
 
 
 @app.route('/users')
 def users_get():
+    if session.get('password', None) != '123':
+        flash('Для продолжения авторизируйтесь', 'error')
+        return redirect(url_for('index'))
     mes = get_flashed_messages(with_categories=True)
     users = session['users_DB']   
     return render_template(
@@ -110,3 +115,21 @@ def user_delete(id):
     session['users_DB'].remove(user)
     flash('User has been deleted', 'success')
     return redirect(url_for('users_get'))
+
+
+@app.route('/login', methods=['post'])
+def login_post():
+    data = request.form.to_dict()
+    session['password'] = data['password']
+    if session.get('password', None) != '123':
+        flash('Ошибочный пароль. Авторизация не выполнена', 'error')
+    else:
+        flash('Авторизация успешна. Доступуп открыт', 'success')
+    return redirect(url_for('index'))
+
+
+@app.route('/logout', methods=['post'])
+def logout_post():
+    session.pop('password')
+    flash('Выход выполнен', 'success')
+    return redirect(url_for('index'))
