@@ -121,6 +121,7 @@ def login_post():
     # working only in sessions
     return redirect(url_for('index'))
 
+
 @app.route('/logout', methods=['post'])
 def logout_post():
     # working only in sessions

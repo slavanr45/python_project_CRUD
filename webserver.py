@@ -31,7 +31,7 @@ def users_get():
         flash('Для продолжения авторизируйтесь', 'error')
         return redirect(url_for('index'))
     mes = get_flashed_messages(with_categories=True)
-    users = session['users_DB']   
+    users = session['users_DB']
     return render_template(
            'users/index.html',
            users=users,   messages=mes)
