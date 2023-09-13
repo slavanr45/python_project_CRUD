@@ -5,33 +5,26 @@ from flask import (
     request,
     flash,
     get_flashed_messages,
-    session,
     url_for
     )
+import json
 
 app = Flask(__name__)
 app.secret_key = "secret_key"
 
+with open('users_db.json', encoding='utf8') as file:
+    users_db = json.load(file)
+
 
 @app.route('/')
 def index():
-    if 'users_DB' not in session:
-        session['users_DB'] = []
-    if not session.modified:
-        session.modified = True
-    print(session)
-    mes = get_flashed_messages(with_categories=True)
-    return render_template(
-        'index.html',   messages=mes)
+    return render_template('index.html')
 
 
 @app.route('/users')
 def users_get():
-    if session.get('password', None) != '123':
-        flash('Для продолжения авторизируйтесь', 'error')
-        return redirect(url_for('index'))
     mes = get_flashed_messages(with_categories=True)
-    users = session['users_DB']   
+    users = users_db
     return render_template(
            'users/index.html',
            users=users,   messages=mes)
@@ -39,7 +32,7 @@ def users_get():
 
 @app.route('/users/<int:id>')
 def user_get(id):
-    user = next(filter(lambda x: x['id'] == id, session['users_DB']), None)
+    user = next(filter(lambda x: x['id'] == id, users_db), None)
     if not user:
         return 'Page not fount', 404
     return render_template(
@@ -66,8 +59,10 @@ def user_post():
             'users/new.html',
             user=data,
             err=err), 422
-    data['id'] = sorted(session['users_DB'], key=lambda x: x['id'])[-1].get('id', 0) + 1
-    session['users_DB'].append(data)
+    data['id'] = sorted(users_db, key=lambda x: x['id'])[-1].get('id', 0) + 1
+    users_db.append(data)
+    with open('users_db.json', 'w', encoding='utf8') as file:
+        json.dump(users_db, file)
     flash('Новый пользователь был создан', 'success')
     return redirect(url_for('users_get'))
 
@@ -83,7 +78,7 @@ def validate(data):
 
 @app.route('/users/<int:id>/edit')
 def user_edit(id):
-    user = next(filter(lambda x: x['id'] == id, session['users_DB']), None)
+    user = next(filter(lambda x: x['id'] == id, users_db), None)
     err = {}
     return render_template(
         'users/edit.html',
@@ -93,7 +88,7 @@ def user_edit(id):
 
 @app.route('/users/<int:id>/edit', methods=['POST'])
 def user_update(id):
-    user = next(filter(lambda x: x['id'] == id, session['users_DB']), None)
+    user = next(filter(lambda x: x['id'] == id, users_db), None)
     data = request.form.to_dict()
     err = validate(data)
     if err:
@@ -101,35 +96,32 @@ def user_update(id):
             'users/edit.html',
             user=user,
             err=err), 422
-    session['users_DB'].remove(user)
+    users_db.remove(user)
     user['name'] = data['name']
     user['email'] = data['email']
-    session['users_DB'].append(user)
+    users_db.append(user)
+    with open('users_db.json', 'w', encoding='utf8') as file:
+        json.dump(users_db, file)
     flash('User has been updated', 'success')
     return redirect(url_for('users_get'))
 
 
 @app.route('/users/<int:id>/delete', methods=['POST'])
 def user_delete(id):
-    user = next(filter(lambda x: x['id'] == id, session['users_DB']), None)
-    session['users_DB'].remove(user)
+    user = next(filter(lambda x: x['id'] == id, users_db), None)
+    users_db.remove(user)
+    with open('users_db.json', 'w', encoding='utf8') as file:
+        json.dump(users_db, file)
     flash('User has been deleted', 'success')
     return redirect(url_for('users_get'))
 
 
 @app.route('/login', methods=['post'])
 def login_post():
-    data = request.form.to_dict()
-    session['password'] = data['password']
-    if session.get('password', None) != '123':
-        flash('Ошибочный пароль. Авторизация не выполнена', 'error')
-    else:
-        flash('Авторизация успешна. Доступуп открыт', 'success')
+    # working only in sessions
     return redirect(url_for('index'))
-
 
 @app.route('/logout', methods=['post'])
 def logout_post():
-    session.pop('password')
-    flash('Выход выполнен', 'success')
+    # working only in sessions
     return redirect(url_for('index'))
