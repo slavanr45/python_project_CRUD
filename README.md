@@ -6,10 +6,10 @@ short command to start webserver with database in JSON file:
 **make start_json**
 
 full command to start webserver with database in JSON file:    
-**poetry run flask --app webserver(json_file_DB) run --port 8000**
+**poetry run flask --app webserver:app_json_file_DB run --port 8000**
 
 short command to start webserver with in 'session' object:   
 **make start**
 
 full command to start webserver with database in 'session' object:   
-**poetry run flask --app webserver run --port 8000**
+**poetry run flask --app webserver:app run --port 8000**
