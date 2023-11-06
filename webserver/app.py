@@ -19,7 +19,7 @@ def index():
         session['users_DB'] = []
     if not session.modified:
         session.modified = True
-    print(session)
+    # print(session)
     mes = get_flashed_messages(with_categories=True)
     return render_template(
         'index.html',   messages=mes)

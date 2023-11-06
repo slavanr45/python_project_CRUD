@@ -5,7 +5,6 @@ start_json:
 start_debug_json:
 	poetry run flask --app webserver:app_json_file_DB --debug run --port 8000
 
-PORT ?= 8000
 start:
 	poetry run gunicorn -w 5 -b 0.0.0.0:$(PORT) webserver:app
 
